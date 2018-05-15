@@ -1,9 +1,33 @@
-const Koa = require('koa');
-const app = new Koa();
+const mongoose = require('mongoose');
 
-app.use(async ctx => {
-  ctx.body = 'Hello World';
-});
+mongoose.Promise = global.Promise;
 
-app.listen(3000);
-console.log('listen 3000')
+const Schema = mongoose.Schema;
+
+const connect = () => {
+  if (process.env.NODE_ENV !== 'production') {
+    mongoose.set('debug', true)
+  }
+  mongoose.connect('mongodb://localhost/study')
+    .then(() => {
+      const mySchema = new Schema({
+        title: String
+      }, {
+        timestamps: true
+      });
+      const MyModel = mongoose.model('MyModel', mySchema);
+      const doc = new MyModel({
+        title: 'Hello2'
+      });
+      console.log(doc);
+      doc.save()
+        .then(() => {
+          console.log('doc saved')
+        })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+};
+
+connect();
