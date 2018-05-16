@@ -34,6 +34,9 @@ const connect = () => {
         .then(() => {
           console.log('smallCat saved')
         })
+        .catch(err => {
+          console.log(err)
+        })
     })
     .catch(err => {
       console.log(err)
